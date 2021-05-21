@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/bg_default_radius_dialog">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_uid_login_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:hint="用户名或邮箱"
+            android:inputType="textEmailAddress"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_pwd_login_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="密码"
+            android:paddingStart="2dp"
+            android:paddingEnd="5dp"
+            android:inputType="textPassword"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:id="@+id/tv_forgetpwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/text_selector_color"
+                android:text="忘记密码"/>
+            <TextView
+                android:id="@+id/tv_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="注册账号"
+                android:textSize="13sp"
+                android:textColor="@color/text_selector_color"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.hjq.widget.view.SubmitButton
+        android:id="@+id/btn_login_commit"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:text="登录" />
+
+</LinearLayout>

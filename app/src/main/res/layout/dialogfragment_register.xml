@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/bg_default_radius_dialog">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_uid_register_df"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_uid_register_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="用户名"
+            android:inputType="number"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_pwd_register_df"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_pwd_register_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="密码"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:paddingStart="2dp"
+            android:paddingEnd="5dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_mobile_register_df"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_mobile_register_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="手机号"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:paddingStart="2dp"
+            android:paddingEnd="5dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_qq_register_df"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_qq_register_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="QQ"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:paddingStart="2dp"
+            android:paddingEnd="5dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingEnd="6dp"
+        android:gravity="center_vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_email_register_df"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_email_register_df"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:hint="邮箱"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:inputType="textWebEmailAddress"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.hjq.widget.view.CountdownView
+            android:id="@+id/cv_register_countdown"
+            style="@style/CountdownViewStyle" />
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_code_register_df"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_code_register_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="邮箱验证码"
+            android:maxLength="@integer/verify_code_length"
+            android:inputType="number"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.hjq.widget.view.SubmitButton
+        android:id="@+id/btn_register_commit"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="30dp"
+        android:text="注册" />
+</LinearLayout>

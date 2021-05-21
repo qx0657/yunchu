@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">云储</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="bottom_nav_doc">文档</string>
+    <string name="bottom_nav_file">文件</string>
+    <string name="bottom_nav_pic">图片</string>
+    <string name="bottom_nav_app">应用</string>
+
+    <!--主题名-->
+    <string-array name="themes">
+        <item>云储绿</item>
+        <item>春之青</item>
+        <item>夏之红</item>
+        <item>秋之丹</item>
+        <item>冬之灰</item>
+        <item>天空蓝</item>
+        <item>少女粉</item>
+    </string-array>
+
+
+    <string name="common_confirm">确定</string>
+    <string name="common_cancel">取消</string>
+    <!--WebView-->
+    <string name="common_web_ssl_error_title">当前网站安全证书已过期或不可信\n是否继续浏览</string>
+    <string name="common_web_ssl_error_allow">继续浏览</string>
+    <string name="common_web_ssl_error_reject">返回上一页</string>
+
+    <string name="common_web_location_permission_title">当前网站需要获取您的地理位置</string>
+    <string name="common_web_location_permission_allow">授予</string>
+    <string name="common_web_location_permission_reject">拒绝</string>
+
+    <string name="common_web_call_phone_title">当前号码 %s</string>
+    <string name="common_web_call_phone_allow">拨打</string>
+    <string name="common_web_call_phone_reject">取消</string>
+
+    <string name="common_network_hint">当前没有网络连接，请检查网络设置</string>
+    <string name="common_no_more_data">没有更多数据了</string>
+
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/toolbar"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="软件"
+        android:textColor="?attr/colorPrimary"
+        android:alpha="0.8"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"/>
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_change_theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="更换主题">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actv_theme_text_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/setting_theme_bg"
+            android:paddingHorizontal="6dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="主题色"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </com.hjq.widget.layout.SettingBar>
+
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_clean_cache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="清空缓存"
+        app:bar_rightIcon="@drawable/arrows_right_ic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="功能"
+        android:textColor="?attr/colorPrimary"
+        android:alpha="0.8"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"/>
+    <com.hjq.widget.layout.SettingBar
+        android:id="@+id/sb_each_page_size_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="每页数据"
+        app:bar_rightText="50 条"/>
+    <com.hjq.widget.layout.SettingBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bar_leftText="显示一言">
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_display_yiyan_setting"
+            android:layout_width="64dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="18dp"
+            android:layout_height="wrap_content"/>
+    </com.hjq.widget.layout.SettingBar>
+</LinearLayout>

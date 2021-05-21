@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#009687</color>
+    <color name="colorPrimaryDark">#009687</color>
+    <color name="colorAccent">#009687</color>
+
+    <color name="colorPrimary_fgz">#FF6200EE</color>
+    <color name="colorPrimaryDark_fgz">#FF6200EE</color>
+    <color name="colorAccent_fgz">#FF6200EE</color>
+
+    <color name="colorPrimary_green">#4caf50</color>
+    <color name="colorPrimaryDark_green">#4caf50</color>
+    <color name="colorAccent_green">#4caf50</color>
+
+    <color name="colorPrimary_red">#cb7575</color>
+    <color name="colorPrimaryDark_red">#cb7575</color>
+    <color name="colorAccent_red">#cb7575</color>
+
+    <color name="colorPrimary_redpro">#c03546</color>
+    <color name="colorPrimaryDark_redpro">#c03546</color>
+    <color name="colorAccent_redpro">#c03546</color>
+
+    <color name="colorPrimary_grey">#9baec8</color>
+    <color name="colorPrimaryDark_grey">#9baec8</color>
+    <color name="colorAccent_grey">#9baec8</color>
+
+    <color name="colorPrimary_blue">#80d4f6</color>
+    <color name="colorPrimaryDark_blue">#80d4f6</color>
+    <color name="colorAccent_blue">#80d4f6</color>
+
+    <color name="colorPrimary_pink">#f48fb1</color>
+    <color name="colorPrimaryDark_pink">#f48fb1</color>
+    <color name="colorAccent_pink">#f48fb1</color>
+
+    <!--白烟-->
+    <color name="WhiteSmoke">#F5F5F5</color>
+
+    <!-- 对话框确认按钮的文本颜色 -->
+    <color name="common_confirm_text_color">#007AFF</color>
+    <!-- 对话框取消按钮的文本颜色 -->
+    <color name="common_cancel_text_color">#F44336</color>
+</resources>

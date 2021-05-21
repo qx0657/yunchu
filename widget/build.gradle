@@ -1,0 +1,10 @@
+apply plugin : 'com.android.library'
+apply from : '../config.gradle'
+
+dependencies {
+    // 基础库（不包任何第三方框架）
+    implementation project(':base')
+    // 动画解析库：https://github.com/airbnb/lottie-android
+    // 动画资源：https://lottiefiles.com、https://icons8.com/animated-icons
+    implementation 'com.airbnb.android:lottie:3.6.1'
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="搜索"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_item_edit_by_id"
+        android:title="输入ID编辑"/>
+    <item
+        android:title="排序">
+        <menu>
+            <item
+                android:id="@+id/menu_item_sort_by_title_rise_home"
+                android:title="按标题升序"/>
+            <item
+                android:id="@+id/menu_item_sort_by_title_down_home"
+                android:title="按标题降序"/>
+            <item
+                android:id="@+id/menu_item_sort_by_update_rise_home"
+                android:title="按更新时间升序"/>
+            <item
+                android:id="@+id/menu_item_sort_by_update_down_home"
+                android:title="按更新时间降序"/>
+            <item
+                android:id="@+id/menu_item_sort_by_create_rise_home"
+                android:title="按创建时间升序"/>
+            <item
+                android:id="@+id/menu_item_sort_by_create_down_home"
+                android:title="按创建时间降序"/>
+        </menu>
+    </item>
+</menu>

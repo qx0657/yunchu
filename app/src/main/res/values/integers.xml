@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 验证码的长度 -->
+    <integer name="verify_code_length">6</integer>
+</resources>

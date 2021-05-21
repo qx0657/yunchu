@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/bg_default_radius_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingEnd="6dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_email_forgetpwd_df"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_email_forgetpwd_df"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:hint="邮箱"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:inputType="textWebEmailAddress"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.hjq.widget.view.CountdownView
+            android:id="@+id/cv_countdown_sendcode"
+            style="@style/CountdownViewStyle" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingEnd="6dp"
+        android:gravity="center_vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_uid_forgetpwd_df"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_uid_forgetpwd_df"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:hint="用户名"
+                android:inputType="number"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.hjq.widget.view.CountdownView
+            android:id="@+id/cv_countdown_forgetusername"
+            style="@style/CountdownViewStyle"
+            android:text="忘记用户名"/>
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_code_forgetpwd_df"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_code_forgetpwd_df"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:hint="邮箱验证码"
+            android:maxLength="@integer/verify_code_length"
+            android:inputType="number"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.hjq.widget.view.SubmitButton
+        android:id="@+id/btn_forgetpwd_commit"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="30dp"
+        android:text="找回密码" />
+</LinearLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <include
+        layout="@layout/toolbar"/>
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/smartRefreshLayout_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:srlEnablePreviewInEditMode="false">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.hjq.widget.layout.WrapRecyclerView
+                android:id="@+id/rv_recycle_bin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <include
+                android:visibility="gone"
+                layout="@layout/layout_empty_data"/>
+        </RelativeLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+</LinearLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 状态布局 -->
+    <string name="status_layout_no_data">空空如也</string>
+    <string name="status_layout_error_request">请求出错，点击重试</string>
+    <string name="status_layout_error_network">网络错误，点击重试</string>
+</resources>
