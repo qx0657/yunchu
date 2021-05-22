@@ -2,6 +2,8 @@ package fun.qianxiao.yunchu.config;
 
 import android.text.TextUtils;
 
+import com.blankj.utilcode.constant.TimeConstants;
+
 import fun.qianxiao.yunchu.utils.MySpUtils;
 
 public class AppConfig {
@@ -22,6 +24,6 @@ public class AppConfig {
     public static final String REQUEST_TOKEN = "INmvNS86U6zHik7RFKlZGDl5wLvWNQqO";
 
     public static final String INVITE_CODE = "EI-447027";
-    public static final String LOGIN_EXPIRE_TIME = String.valueOf(10);
+    public static final String LOGIN_EXPIRE_TIME = String.valueOf(3 * TimeConstants.DAY/1000 - 1);
 
 }
