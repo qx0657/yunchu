@@ -123,7 +123,7 @@
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:src="@drawable/ic_clock"
+                    android:src="@drawable/ic_edit_time"
                     app:tint="@color/black35" />
                 <TextView
                     android:id="@+id/tv_update_document_item"

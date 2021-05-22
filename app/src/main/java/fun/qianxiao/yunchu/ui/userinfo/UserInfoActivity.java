@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.blankj.utilcode.util.ThreadUtils;
@@ -26,6 +27,7 @@ import fun.qianxiao.yunchu.eventbus.EBLoginExpire;
 import fun.qianxiao.yunchu.model.OperateListener;
 import fun.qianxiao.yunchu.model.UserInfoModel;
 import fun.qianxiao.yunchu.ui.userinfo.utils.OnVerifyResult;
+import fun.qianxiao.yunchu.ui.userinfo.utils.fingerprint.FingerprintManagerUtil;
 import fun.qianxiao.yunchu.ui.userinfo.view.ResetPwdDialogFragment;
 import fun.qianxiao.yunchu.ui.userinfo.view.VerifyFingerprintAlterDialog;
 import fun.qianxiao.yunchu.utils.ToastTool;
@@ -41,6 +43,37 @@ public class UserInfoActivity extends BaseActivity<ActivityUserInfoBinding> impl
         return ActivityUserInfoBinding.inflate(getLayoutInflater());
     }
 
+    public interface OnVerifySuccessCallback{
+        void verifySuccess();
+    }
+    private void invokeFingerPrint(OnVerifySuccessCallback callback){
+        if(verifyFingerprintAlterDialog == null){
+            verifyFingerprintAlterDialog = new VerifyFingerprintAlterDialog(context);
+        }
+        verifyFingerprintAlterDialog.setOnVerifyResult(new OnVerifyResult() {
+            @Override
+            public void verifySuccess(BaseAlertDialog dialog) {
+                ThreadUtils.runOnUiThreadDelayed(()->{
+                    dialog.dismiss();
+                    callback.verifySuccess();
+                },200);
+            }
+
+            @Override
+            public void verifyFail(BaseAlertDialog dialog, String e) {
+                dialog.dismiss();
+                ToastTool.error(e);
+            }
+
+            @Override
+            public void verifyCancle(BaseAlertDialog dialog) {
+
+            }
+        });
+        verifyFingerprintAlterDialog.setCancelable(true);
+        verifyFingerprintAlterDialog.show();
+    }
+
     @Override
     protected void initListener() {
         binding.cvInviteCodeUserinfo.setOnClickListener(v -> {
@@ -48,80 +81,41 @@ public class UserInfoActivity extends BaseActivity<ActivityUserInfoBinding> impl
             ToastTool.success("邀请码已复制至剪贴板");
         });
         binding.tvResetKeyUserinfo.setOnClickListener(v -> {
+            if(FingerprintManagerUtil.isSupportFingerPaint(context)){
+                invokeFingerPrint(() -> {
+                    openLoadingDialog("正在重置");
+                    new UserInfoModel().resetUserAppKey(new OperateListener() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void operateSuccess(String appKey) {
+                            closeLoadingDialog();
+                            ToastTool.success("AppKey重置成功");
+                            binding.tvAppkeyUia.setTag(appKey);
+                            binding.tvAppkeyUia.setText(appKey.substring(0,12)+"********"+appKey.substring(20,32));
+                        }
 
-            if(verifyFingerprintAlterDialog == null){
-                verifyFingerprintAlterDialog = new VerifyFingerprintAlterDialog(context);
+                        @Override
+                        public void operateError(String e) {
+                            closeLoadingDialog();
+                            ToastTool.error(e);
+                        }
+                    });
+                });
+            }else{
+
             }
-            verifyFingerprintAlterDialog.setOnVerifyResult(new OnVerifyResult() {
-                @Override
-                public void verifySuccess(BaseAlertDialog dialog) {
-                    ThreadUtils.runOnUiThreadDelayed(()->{
-                        dialog.dismiss();
-                        openLoadingDialog("正在重置");
-                        new UserInfoModel().resetUserAppKey(new OperateListener() {
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void operateSuccess(String appKey) {
-                                closeLoadingDialog();
-                                ToastTool.success("AppKey重置成功");
-                                binding.tvAppkeyUia.setTag(appKey);
-                                binding.tvAppkeyUia.setText(appKey.substring(0,12)+"********"+appKey.substring(20,32));
-                            }
-
-                            @Override
-                            public void operateError(String e) {
-                                closeLoadingDialog();
-                                ToastTool.error(e);
-                            }
-                        });
-                    },200);
-                }
-
-                @Override
-                public void verifyFail(BaseAlertDialog dialog, String e) {
-                    dialog.dismiss();
-                    ToastTool.error(e);
-                }
-
-                @Override
-                public void verifyCancle(BaseAlertDialog dialog) {
-
-                }
-            });
-            verifyFingerprintAlterDialog.setCancelable(true);
-            verifyFingerprintAlterDialog.show();
-
         });
         binding.tvCopyKeyUserinfo.setOnClickListener(v -> {
             ClipboardUtils.copyText((String) binding.tvAppkeyUia.getTag());
             ToastTool.success("AppKey已复制至剪贴板");
         });
         binding.sbResPwdUia.setOnClickListener(v -> {
-            if(verifyFingerprintAlterDialog == null){
-                verifyFingerprintAlterDialog = new VerifyFingerprintAlterDialog(context);
+            if(FingerprintManagerUtil.isSupportFingerPaint(context)){
+                invokeFingerPrint(() -> new ResetPwdDialogFragment().show(getSupportFragmentManager(),"ResetPwdDialogFragment"));
+            }else{
+                new ResetPwdDialogFragment().show(getSupportFragmentManager(),"ResetPwdDialogFragment");
             }
-            verifyFingerprintAlterDialog.setOnVerifyResult(new OnVerifyResult() {
-                @Override
-                public void verifySuccess(BaseAlertDialog dialog) {
-                    ThreadUtils.runOnUiThreadDelayed(()->{
-                        dialog.dismiss();
-                        new ResetPwdDialogFragment().show(getSupportFragmentManager(),"ResetPwdDialogFragment");
-                    },200);
-                }
 
-                @Override
-                public void verifyFail(BaseAlertDialog dialog, String e) {
-                    dialog.dismiss();
-                    ToastTool.error(e);
-                }
-
-                @Override
-                public void verifyCancle(BaseAlertDialog dialog) {
-
-                }
-            });
-            verifyFingerprintAlterDialog.setCancelable(true);
-            verifyFingerprintAlterDialog.show();
         });
     }
 
@@ -169,72 +163,57 @@ public class UserInfoActivity extends BaseActivity<ActivityUserInfoBinding> impl
         return true;
     }
 
+    private void destoryUID(){
+        new AlertDialog.Builder(context)
+                .setTitle("注销账号")
+                .setMessage("您确认要注销账号吗？")
+                .setPositiveButton("确认", (dialog1, which1) -> {
+                    new AlertDialog.Builder(context)
+                            .setTitle("注销账号")
+                            .setMessage("将会申请注销你的云储账号。确认继续？")
+                            .setPositiveButton("确认", (dialog2, which2) -> {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("注销账号")
+                                        .setMessage("注销成功后，你将会无法在使用云储服务。您确认要注销账号吗？")
+                                        .setPositiveButton("确认", (dialog3, which3) -> {
+                                            openLoadingDialog("正在注销");
+                                            new UserInfoModel().destory(new OperateListener() {
+                                                @Override
+                                                public void operateSuccess(String var1) {
+                                                    closeLoadingDialog();
+                                                    ToastTool.success("注销成功");
+                                                    finish();
+                                                    ThreadUtils.runOnUiThreadDelayed(()->EventBus.getDefault().post(new EBLoginExpire(true)),500);
+                                                }
+
+                                                @Override
+                                                public void operateError(String e) {
+                                                    closeLoadingDialog();
+                                                    ToastTool.error(e);
+                                                }
+                                            });
+                                        })
+                                        .setNegativeButton("取消", null)
+                                        .show().getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, R.color.common_cancel_text_color));
+                            })
+                            .setNegativeButton("取消", null)
+                            .show().getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, R.color.common_cancel_text_color));
+                })
+                .setNegativeButton("取消", null)
+                .show().getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, R.color.common_cancel_text_color));
+
+    }
+
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_item_destory:
-
-                if(verifyFingerprintAlterDialog == null){
-                    verifyFingerprintAlterDialog = new VerifyFingerprintAlterDialog(context);
+                if(FingerprintManagerUtil.isSupportFingerPaint(context)){
+                    invokeFingerPrint(this::destoryUID);
+                }else{
+                    destoryUID();
                 }
-                verifyFingerprintAlterDialog.setOnVerifyResult(new OnVerifyResult() {
-                    @Override
-                    public void verifySuccess(BaseAlertDialog dialog) {
-                        ThreadUtils.runOnUiThreadDelayed(()->{
-                            dialog.dismiss();
-                            new AlertDialog.Builder(context)
-                                    .setTitle("注销账号")
-                                    .setMessage("您确认要注销账号吗？")
-                                    .setPositiveButton("确认", (dialog1, which1) -> {
-                                        new AlertDialog.Builder(context)
-                                                .setTitle("注销账号")
-                                                .setMessage("将会申请注销你的云储账号。确认继续？")
-                                                .setPositiveButton("确认", (dialog2, which2) -> {
-                                                    new AlertDialog.Builder(context)
-                                                            .setTitle("注销账号")
-                                                            .setMessage("注销成功后，你将会无法在使用云储服务。您确认要注销账号吗？")
-                                                            .setPositiveButton("确认", (dialog3, which3) -> {
-                                                                openLoadingDialog("正在注销");
-                                                                new UserInfoModel().destory(new OperateListener() {
-                                                                    @Override
-                                                                    public void operateSuccess(String var1) {
-                                                                        closeLoadingDialog();
-                                                                        ToastTool.success("注销成功");
-                                                                        finish();
-                                                                        ThreadUtils.runOnUiThreadDelayed(()->EventBus.getDefault().post(new EBLoginExpire(true)),500);
-                                                                    }
-
-                                                                    @Override
-                                                                    public void operateError(String e) {
-                                                                        closeLoadingDialog();
-                                                                        ToastTool.error(e);
-                                                                    }
-                                                                });
-                                                            })
-                                                            .setNegativeButton("取消", null)
-                                                            .show();
-                                                })
-                                                .setNegativeButton("取消", null)
-                                                .show();
-                                    })
-                                    .setNegativeButton("取消", null)
-                                    .show();
-                        },200);
-                    }
-
-                    @Override
-                    public void verifyFail(BaseAlertDialog dialog, String e) {
-                        dialog.dismiss();
-                        ToastTool.error(e);
-                    }
-
-                    @Override
-                    public void verifyCancle(BaseAlertDialog dialog) {
-
-                    }
-                });
-                verifyFingerprintAlterDialog.setCancelable(true);
-                verifyFingerprintAlterDialog.show();
                 break;
             default:
                 break;

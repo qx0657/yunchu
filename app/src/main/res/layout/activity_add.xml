@@ -125,7 +125,6 @@
                     android:text="私密"/>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/ll_more_display_or_hide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

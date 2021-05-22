@@ -350,7 +350,7 @@ public class AddEditActivity extends BaseActivity<ActivityAddBinding> implements
             });
         }else{
             binding.etTitleAdd.setText("云储文档"+ TimeUtils.getNowString());
-            binding.sbKeyAdd.setVisibility(View.GONE);
+            //binding.sbKeyAdd.setVisibility(View.GONE);
             performEdit = new PerformEdit(binding.tieContentAddA, binding.ivUndoAdd, binding.ivRedoAdd);
             performEdit.setDefaultText("");
         }

@@ -151,19 +151,24 @@ public class FileFragment extends BaseFragment<FragmentFileBinding> {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(context)
                                             .setTitle("上传成功")
                                             .setMessage(text)
-                                            .setPositiveButton("复制文件链接", (dialog, which) -> {
-                                                ClipboardUtils.copyText(finalFile_url);
-                                                ToastTool.success("文件链接已复制至剪贴板");
-                                            });
+                                            .setPositiveButton("复制文件链接", null);
                                     if(!TextUtils.isEmpty(collection_url)){
-                                        builder = builder.setNeutralButton("复制合集链接", (dialog, which) -> {
-                                                    ClipboardUtils.copyText(finalCollection_url);
-                                                    ToastTool.success("合集链接已复制至剪贴板");
-                                                });
+                                        builder = builder.setNeutralButton("复制合集链接", null);
                                     }
-                                    builder.setNegativeButton("取消", null)
+                                    AlertDialog alertDialog = builder.setNegativeButton("关闭", null)
                                             .setCancelable(false)
-                                            .show().setOnDismissListener(dialog -> binding.btnUploadCommit.reset());
+                                            .show();
+                                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{
+                                        ClipboardUtils.copyText(finalFile_url);
+                                        ToastTool.success("文件链接已复制至剪贴板");
+                                    });
+                                    if(!TextUtils.isEmpty(collection_url)){
+                                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v1 -> {
+                                            ClipboardUtils.copyText(finalCollection_url);
+                                            ToastTool.success("合集链接已复制至剪贴板");
+                                        });
+                                    }
+                                    alertDialog.setOnDismissListener(dialog -> binding.btnUploadCommit.reset());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     ToastTool.error("数据解析错误 "+e.getMessage());

@@ -2,10 +2,17 @@ package fun.qianxiao.yunchu.fragment.doc;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.AttributeSet;
+import android.view.ContextMenu;
+import android.view.Gravity;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -14,6 +21,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -383,29 +392,14 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
     @Override
     public boolean onItemLongClick(RecyclerView recyclerView, View itemView, int position) {
         DocumentBean documentBean = adapter.getItem(position);
-        AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setTitle(documentBean.getId()+" "+documentBean.getTitle())
+        /*AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setMessage(documentBean.getId()+" "+documentBean.getTitle())
                 .setNeutralButton("删除", (dialog, which) -> {
-                    ((MainActivity) Objects.requireNonNull(getActivity())).openLoadingDialog("正在删除");
-                    new DocumentModel(context).delete(documentBean.getId(), new OperateListener() {
-                        @Override
-                        public void operateSuccess(String var1) {
-                            ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
-                            ToastTool.success("删除成功");
-                            adapter.removeItem(position);
 
-                            ThreadUtils.runOnUiThreadDelayed(()-> adapterDataObserverOnChanged(),200);
-                        }
-
-                        @Override
-                        public void operateError(String e) {
-                            ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
-                            ToastTool.error(e);
-                        }
-                    });
                 })
                 .setPositiveButton("复制", null)
                 .show();
+        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(ContextCompat.getColor(context, R.color.common_cancel_text_color));
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{
             PopupMenu popupMenu = new PopupMenu(context, alertDialog.getButton(AlertDialog.BUTTON_POSITIVE));
             popupMenu.inflate(R.menu.menu_copy);
@@ -444,7 +438,88 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
                 return true;
             });
             popupMenu.show();
+        });*/
+
+        PopupMenu popupMenu = new PopupMenu(context, itemView);
+        popupMenu.inflate(R.menu.menu_decoment_item_long_click);
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()){
+                case R.id.menu_item_del_item_long_click:
+                    new AlertDialog.Builder(context)
+                            .setTitle("温馨提示")
+                            .setMessage("删除后可在回收站查看，是否确认删除？")
+                            .setPositiveButton("确认", (dialog, which) -> {
+                                ((MainActivity) Objects.requireNonNull(getActivity())).openLoadingDialog("正在删除");
+                                new DocumentModel(context).delete(documentBean.getId(), new OperateListener() {
+                                    @Override
+                                    public void operateSuccess(String var1) {
+                                        ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
+                                        ToastTool.success("删除成功");
+                                        adapter.removeItem(position);
+
+                                        ThreadUtils.runOnUiThreadDelayed(()-> adapterDataObserverOnChanged(),200);
+                                    }
+
+                                    @Override
+                                    public void operateError(String e) {
+                                        ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
+                                        ToastTool.error(e);
+                                    }
+                                });
+                            })
+                            .setNegativeButton("取消", null)
+                            .show();
+                    break;
+                case R.id.menu_item_copy_item_long_click:
+                    PopupMenu popupMenu2 = new PopupMenu(context, itemView);
+                    popupMenu2.inflate(R.menu.menu_copy);
+                    popupMenu2.setOnMenuItemClickListener(item2 -> {
+                        String copy_text = documentBean.getHost() + documentBean.getId();
+                        switch (item2.getItemId()) {
+                            case R.id.menu_item_copy_id:
+                                copy_text = String.valueOf(documentBean.getId());
+                                ToastTool.success("文档ID已复制到剪贴板");
+                                break;
+                            case R.id.menu_item_copy_html:
+                                copy_text += ".html";
+                                ToastTool.success("HTML链接已复制到剪贴板");
+                                break;
+                            case R.id.menu_item_copy_json:
+                                copy_text += ".json";
+                                ToastTool.success("JSON链接已复制到剪贴板");
+                                break;
+                            case R.id.menu_item_copy_md5:
+                                copy_text += ".md5";
+                                ToastTool.success("MD5链接已复制到剪贴板");
+                                break;
+                            case R.id.menu_item_copy_css:
+                                copy_text += ".css";
+                                ToastTool.success("CSS链接已复制到剪贴板");
+                                break;
+                            case R.id.menu_item_copy_js:
+                                copy_text += ".js";
+                                ToastTool.success("JS链接已复制到剪贴板");
+                                break;
+                            default:
+                                break;
+                        }
+                        ClipboardUtils.copyText(copy_text);
+                        return true;
+                    });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        popupMenu2.setGravity(Gravity.END);
+                    }
+                    popupMenu2.show();
+                    break;
+                default:
+                    break;
+            }
+            return true;
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            popupMenu.setGravity(Gravity.END);
+        }
+        popupMenu.show();
         return true;
     }
 }

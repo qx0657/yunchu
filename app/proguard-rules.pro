@@ -102,6 +102,7 @@
 
 #实体
 -keep class fun.qianxiao.yunchu.bean.UserInfo { <fields>; }
+-keep class fun.qianxiao.yunchu.net.easyhttp.FileUploadApi { <fields>; }
 
 #第三方库-----------------------------------------
 

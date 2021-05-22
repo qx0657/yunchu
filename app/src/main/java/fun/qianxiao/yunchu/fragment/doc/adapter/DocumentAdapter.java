@@ -46,20 +46,7 @@ public class DocumentAdapter extends AppAdapter<DocumentBean> {
             binding.tvTitleDocumentItem.setText(bean.getTitle());
             binding.tvDescDocumentItem.setText(bean.getDesc());
             binding.tvCreateDocumentItem.setText(TimeUtils.date2String(bean.getCreate(), TimeUtils.getSafeDateFormat("yyyy-MM-dd")));
-            long updateTimeSub = TimeUtils.getNowMills() - bean.getModify_time()*1000;
-            if(updateTimeSub < TimeConstants.MIN){
-                binding.tvUpdateDocumentItem.setText("刚刚");
-            }else if(updateTimeSub < TimeConstants.HOUR){
-                binding.tvUpdateDocumentItem.setText((int)Math.floor(updateTimeSub*1.0f/TimeConstants.MIN)+"分钟前");
-            }else if(updateTimeSub < TimeConstants.DAY){
-                binding.tvUpdateDocumentItem.setText((int)Math.floor(updateTimeSub*1.0f/TimeConstants.HOUR)+"小时前");
-            }else if(updateTimeSub < 2*TimeConstants.DAY){
-                binding.tvUpdateDocumentItem.setText("昨天");
-            }else if(updateTimeSub < 3*TimeConstants.DAY){
-                binding.tvUpdateDocumentItem.setText("前天");
-            }else {
-                binding.tvUpdateDocumentItem.setText(TimeUtils.date2String(TimeUtils.millis2Date(bean.getModify_time()*1000)));
-            }
+            binding.tvUpdateDocumentItem.setText(TimeUtils.getFriendlyTimeSpanByNow(bean.getModify_time()*1000));
             binding.tvReadDocumentItem.setText(String.valueOf(bean.getRead()));
             binding.tvModifyDocumentItem.setText(String.valueOf(bean.getModify()));
             binding.ivPasswordDocumentItem.setVisibility(TextUtils.isEmpty(bean.getPassword())? View.GONE:View.VISIBLE);
