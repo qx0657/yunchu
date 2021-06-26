@@ -2,18 +2,11 @@ package fun.qianxiao.yunchu.fragment.doc;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.view.ContextMenu;
 import android.view.Gravity;
-import android.view.InflateException;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -21,12 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.ActionMenuItemView;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,10 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ClipboardUtils;
 import com.blankj.utilcode.util.ConvertUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
 import com.hjq.base.BaseAdapter;
 import com.hjq.base.BaseDialog;
+import com.king.zxing.CameraScan;
+import com.king.zxing.CaptureActivity;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener;
 
@@ -52,16 +43,22 @@ import java.util.Objects;
 
 import fun.qianxiao.yunchu.MyApplication;
 import fun.qianxiao.yunchu.R;
+import fun.qianxiao.yunchu.base.BaseActivity;
 import fun.qianxiao.yunchu.base.BaseFragment;
 import fun.qianxiao.yunchu.bean.DocumentBean;
 import fun.qianxiao.yunchu.bean.User;
 import fun.qianxiao.yunchu.databinding.FragmentDocBinding;
 import fun.qianxiao.yunchu.eventbus.EBCreateDocumentSuccess;
+import fun.qianxiao.yunchu.eventbus.EBRequestLogin;
 import fun.qianxiao.yunchu.eventbus.EBSubTitleRefresh;
 import fun.qianxiao.yunchu.fragment.doc.adapter.DocumentAdapter;
+import fun.qianxiao.yunchu.fragment.doc.view.JuBaoDialogFragment;
+import fun.qianxiao.yunchu.fragment.doc.view.RegisterDialogFragment;
 import fun.qianxiao.yunchu.lunzige.dialog.InputDialog;
+import fun.qianxiao.yunchu.lunzige.dialog.MessageDialog;
 import fun.qianxiao.yunchu.model.DocumentModel;
 import fun.qianxiao.yunchu.model.OperateListener;
+import fun.qianxiao.yunchu.model.ScanCodeModel;
 import fun.qianxiao.yunchu.model.SearchModel;
 import fun.qianxiao.yunchu.ui.addoredit.AddEditActivity;
 import fun.qianxiao.yunchu.ui.main.MainActivity;
@@ -74,6 +71,7 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
     private DocumentModel documentModel;
 
     private final int EDIT_ACTIVITY_REQUEST_CODE = 101;
+    private final int SCAN_CODE_ACTIVITY_REQUEST_CODE = 102;
 
     protected int curPage = 1;
     protected final int PER_PAGE = MySpUtils.getInt("each_page_size");
@@ -90,6 +88,18 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void initListener() {
+        binding.rvDocumentHome.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && binding.fbAddDocumentHome.getVisibility() == View.VISIBLE) {
+                    binding.fbAddDocumentHome.hide();
+                } else if (dy < 0 && binding.fbAddDocumentHome.getVisibility() != View.VISIBLE) {
+                    binding.fbAddDocumentHome.show();
+                }
+            }
+        });
         binding.smartRefreshLayoutHome.setOnRefreshLoadMoreListener(this);
         binding.fbAddDocumentHome.setOnClickListener(v -> {
             if(MyApplication.user == null){
@@ -100,6 +110,7 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
             }
         });
         binding.toolBar.inflateMenu(R.menu.menu_home_fragment);
+
         SearchView searchView = (SearchView) binding.toolBar.getMenu().findItem(R.id.app_bar_search).getActionView();
         searchView.setQueryHint("请输入标题关键字搜索");
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
@@ -164,7 +175,20 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
         }
         binding.toolBar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()){
+                case R.id.menu_item_scan_qrcode:
+                    if(MyApplication.user == null){
+                        ToastTool.warning("请登录后使用");
+                        ThreadUtils.runOnUiThreadDelayed(()->EventBus.getDefault().post(new EBRequestLogin(true)),750);
+                        return true;
+                    }
+                    startActivityForResult(new Intent(context, CaptureActivity.class), SCAN_CODE_ACTIVITY_REQUEST_CODE);
+                    return true;
                 case R.id.menu_item_edit_by_id:
+                    if(MyApplication.user == null){
+                        ToastTool.warning("请登录后使用");
+                        ThreadUtils.runOnUiThreadDelayed(()->EventBus.getDefault().post(new EBRequestLogin(true)),750);
+                        return true;
+                    }
                     new InputDialog.Builder(context)
                             .setInputType(InputType.TYPE_CLASS_NUMBER)
                             .setHint("请输入您的文档ID")
@@ -219,6 +243,9 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
                     curSortMethod = DocumentModel.SortMethod.DESC;
                     binding.smartRefreshLayoutHome.autoRefresh();
                     break;
+                case R.id.menu_item_jubao_doc:
+                    new JuBaoDialogFragment().show(getFragmentManager(),"JuBaoDialogFragment");
+                    return true;
             }
             return true;
         });
@@ -381,6 +408,46 @@ public class DocumentFragment extends BaseFragment<FragmentDocBinding>
             case EDIT_ACTIVITY_REQUEST_CODE:
                 if(resultCode == Activity.RESULT_OK){
                     binding.smartRefreshLayoutHome.autoRefresh();
+                }
+                break;
+            case SCAN_CODE_ACTIVITY_REQUEST_CODE:
+                if(resultCode == Activity.RESULT_OK && data!=null){
+                    String result = CameraScan.parseScanResult(data);
+                    ((MainActivity) Objects.requireNonNull(getActivity())).openLoadingDialog("请稍后");
+                    ScanCodeModel scanCodeModel = new ScanCodeModel();
+                    scanCodeModel.scan(result, new ScanCodeModel.YunchuScanCallback() {
+                        @Override
+                        public void scanSuccess(String data) {
+                            ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
+                            new MessageDialog.Builder(context)
+                                    .setMessage("是否确认登录？")
+                                    .setListener(dialog -> {
+                                        ((MainActivity) Objects.requireNonNull(getActivity())).openLoadingDialog("登录中");
+                                        scanCodeModel.confirm(data, new ScanCodeModel.YunchuScanCallback() {
+                                            @Override
+                                            public void scanSuccess(String data1) {
+                                                ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
+                                                ToastTool.success("登录成功");
+                                            }
+
+                                            @Override
+                                            public void scanError(String e) {
+                                                ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
+                                                ToastTool.error(e);
+                                            }
+                                        });
+                                    })
+                                    .setCancelable(false)
+                                    .show();
+
+                        }
+
+                        @Override
+                        public void scanError(String e) {
+                            ((MainActivity) Objects.requireNonNull(getActivity())).closeLoadingDialog();
+                            ToastTool.error(e);
+                        }
+                    });
                 }
                 break;
             default:

@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-String getDate() {
+static String getDate() {
     Date date = new Date();
     return date.format("yyyy-MM-dd hh:mm:ss", TimeZone.getTimeZone("UTC"));
 }
@@ -15,8 +15,8 @@ android {
         applicationId "fun.qianxiao.yunchu"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.3"
 
         buildConfigField "String", "BUILD_TIME", "\""+getDate()+"\""
     }
@@ -98,5 +98,11 @@ dependencies {
 
     // BottomNavigationViewEx https://github.com/ittianyu/BottomNavigationViewEx
     implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
+
+    // 扫码依赖库 https://github.com/jenly1314/ZXingLite
+    implementation 'com.king.zxing:zxing-lite:2.0.3'
+
+    // 图片选择器 https://hub.fastgit.org/smuyyh/ImageSelector
+    //implementation 'com.yuyh.imgsel:library:2.1.0'
 
 }

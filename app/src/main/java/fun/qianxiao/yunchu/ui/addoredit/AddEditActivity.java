@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
+import android.util.FloatMath;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -14,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.blankj.utilcode.util.BarUtils;
@@ -26,6 +31,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.TimeUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +45,7 @@ import fun.qianxiao.yunchu.base.BaseActivity;
 import fun.qianxiao.yunchu.bean.DocumentBean;
 import fun.qianxiao.yunchu.databinding.ActivityAddBinding;
 import fun.qianxiao.yunchu.eventbus.EBCreateDocumentSuccess;
+import fun.qianxiao.yunchu.lunzige.dialog.MessageDialog;
 import fun.qianxiao.yunchu.model.DocumentModel;
 import fun.qianxiao.yunchu.model.OperateListener;
 import fun.qianxiao.yunchu.utils.PerformEdit;
@@ -51,6 +58,8 @@ public class AddEditActivity extends BaseActivity<ActivityAddBinding> implements
     private MyLoadingDialog loadingDialog;
     private FromType fromType = FromType.ADD;
     private long editId = -1;
+    private DocumentBean editDocumentBean;
+    private boolean isChange;
 
     public enum FromType{
         ADD,EDIT
@@ -320,6 +329,7 @@ public class AddEditActivity extends BaseActivity<ActivityAddBinding> implements
                 @Override
                 public void getDocumentSuccess(DocumentBean documentBean) {
                     closeLoadingDialog();
+                    editDocumentBean = documentBean;
                     binding.etTitleAdd.setText(documentBean.getTitle());
                     binding.tieContentAddA.setText(documentBean.getContent());
                     binding.cbHtmlAdd.setChecked(documentBean.isHtml());
@@ -350,7 +360,7 @@ public class AddEditActivity extends BaseActivity<ActivityAddBinding> implements
             });
         }else{
             binding.etTitleAdd.setText("云储文档"+ TimeUtils.getNowString());
-            //binding.sbKeyAdd.setVisibility(View.GONE);
+            binding.sbKeyAdd.setVisibility(View.GONE);
             performEdit = new PerformEdit(binding.tieContentAddA, binding.ivUndoAdd, binding.ivRedoAdd);
             performEdit.setDefaultText("");
         }
@@ -432,7 +442,7 @@ public class AddEditActivity extends BaseActivity<ActivityAddBinding> implements
     @Override
     public void onSoftInputChanged(int height) {
         ViewGroup.LayoutParams lp = binding.tilContentAddA.getLayoutParams();
-        LogUtils.i(ScreenUtils.getScreenHeight(),BarUtils.getStatusBarHeight(),BarUtils.getActionBarHeight());
+        //LogUtils.i(ScreenUtils.getScreenHeight(),BarUtils.getStatusBarHeight(),BarUtils.getActionBarHeight());
         lp.height = ScreenUtils.getScreenHeight()-BarUtils.getStatusBarHeight()-BarUtils.getActionBarHeight()-ConvertUtils.dp2px(48+5+5)-height;
         binding.tilContentAddA.setLayoutParams(lp);
     }
@@ -453,5 +463,35 @@ public class AddEditActivity extends BaseActivity<ActivityAddBinding> implements
         if(loadingDialog!=null && loadingDialog.isShowing()){
             loadingDialog.dismiss();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if(fromType == FromType.EDIT&&editDocumentBean!=null){
+                if(!editDocumentBean.getContent().equals(binding.tieContentAddA.getText().toString())){
+                    new AlertDialog.Builder(context)
+                            .setTitle("温馨提示")
+                            .setMessage("您已更改内容，是否保存？")
+                            .setPositiveButton("保存退出", (dialog, which) -> Save())
+                            .setNegativeButton("取消", null)
+                            .setNeutralButton("不保存退出", (dialog, which) -> finish())
+                            .show();
+                    return true;
+                }
+            }
+        }
+        finish();
+        return true;
+    }
+
+
+
+    //获取两指间的距离
+    @SuppressWarnings("unused")
+    private float spacing(MotionEvent event){
+        float x=event.getX(0) - event.getX(1);
+        float y=event.getY(0) - event.getY(1);
+        return (float) Math.sqrt(x * x + y * y);
     }
 }

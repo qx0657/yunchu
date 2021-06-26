@@ -8,6 +8,10 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/menu_item_scan_qrcode"
+        app:actionViewClass="android.widget.TextView"
+        android:title="客户端扫码"/>
+    <item
         android:id="@+id/menu_item_edit_by_id"
         android:title="输入ID编辑"/>
     <item
@@ -33,4 +37,7 @@
                 android:title="按创建时间降序"/>
         </menu>
     </item>
+    <item
+        android:id="@+id/menu_item_jubao_doc"
+        android:title="举报文档"/>
 </menu>

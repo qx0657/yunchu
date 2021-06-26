@@ -181,7 +181,8 @@ public class RegisterDialogFragment
                 binding.btnRegisterCommit.showError(2000);
                 return;
             }
-            KeyboardUtils.hideSoftInput(Objects.requireNonNull(getActivity()));
+            tie_code_register_df.requestFocus();
+            KeyboardUtils.hideSoftInput(tie_code_register_df);
             new UserManagerModel().register((String) binding.cvRegisterCountdown.getTag(), uid, pwd, email, code, phone, qq, new UserManagerModel.OnRegisterListener() {
                         @Override
                         public void registerSuccess(String uid, String pwd) {

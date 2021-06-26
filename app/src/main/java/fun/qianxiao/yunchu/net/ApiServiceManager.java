@@ -24,7 +24,7 @@ public class ApiServiceManager {
                 .writeTimeout(DEFAULT_WRITE_TIME, TimeUnit.SECONDS)
                 .readTimeout(DEFAULT_READ_TIME, TimeUnit.SECONDS)
                 .addInterceptor(new BasicParamsInterceptor.Builder()
-                        .addHeaderLine("app: true")  // 示例： 添加公共消息头
+                        .addHeaderLine("App: true")  // 示例： 添加公共消息头
                         .addHeaderLine("User-Agent: okhttp/4.9.0 YC/APP-QX")  // 示例： 添加公共消息头
                         .build())
                 .build();

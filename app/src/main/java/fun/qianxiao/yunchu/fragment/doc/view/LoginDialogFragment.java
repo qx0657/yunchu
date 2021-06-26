@@ -74,7 +74,7 @@ public class LoginDialogFragment extends BaseDialogFragment<DialogfragmentLoginB
             String uid = Objects.requireNonNull(tie_uid_login_df.getText()).toString();
             if(TextUtils.isEmpty(uid)){
                 ToastTool.warning("请输入用户名或邮箱");
-                binding.tieUidLoginDf.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
+                binding.tilUidLoginDf.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
                 binding.btnLoginCommit.showError(2000);
                 tie_uid_login_df.requestFocus();
                 return;
@@ -82,7 +82,7 @@ public class LoginDialogFragment extends BaseDialogFragment<DialogfragmentLoginB
             String pwd = Objects.requireNonNull(tie_pwd_login_df.getText()).toString();
             if(TextUtils.isEmpty(pwd)){
                 ToastTool.warning("请输入密码");
-                binding.tiePwdLoginDf.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
+                binding.tilPwdLoginDf.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
                 binding.btnLoginCommit.showError(2000);
                 tie_pwd_login_df.requestFocus();
                 return;

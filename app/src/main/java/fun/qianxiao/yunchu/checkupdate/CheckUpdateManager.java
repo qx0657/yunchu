@@ -115,7 +115,7 @@ public final class CheckUpdateManager implements ILoadingView {
                                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        if(isBrowserDownload){
+                                        if(isBrowserDownload||Build.VERSION.SDK_INT>=Build.VERSION_CODES.R){
                                             //从其他浏览器打开
                                             Intent intent = new Intent();
                                             intent.setAction("android.intent.action.VIEW");

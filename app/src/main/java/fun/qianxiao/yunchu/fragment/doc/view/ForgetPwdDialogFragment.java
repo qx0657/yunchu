@@ -166,7 +166,8 @@ public class ForgetPwdDialogFragment extends BaseDialogFragment<DialogfragmentFo
                 binding.btnForgetpwdCommit.showError(2000);
                 return;
             }
-            KeyboardUtils.hideSoftInput(Objects.requireNonNull(getActivity()));
+            binding.tieCodeForgetpwdDf.requestFocus();
+            KeyboardUtils.hideSoftInput(binding.tieCodeForgetpwdDf);
             new UserManagerModel().resetPwd((String) binding.cvCountdownSendcode.getTag(), username, email, code,
                     new OperateListener() {
                         @Override

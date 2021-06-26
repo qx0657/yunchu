@@ -48,7 +48,7 @@ public class MyApplication extends Application {
 
         EasyConfig.with(new OkHttpClient.Builder()
                     .addInterceptor(new BasicParamsInterceptor.Builder()
-                            .addHeaderLine("app: true")  // 示例： 添加公共消息头
+                            .addHeaderLine("App: true")  // 示例： 添加公共消息头
                             .addHeaderLine("User-Agent: okhttp/4.9.0 YC/APP-QX")  // 示例： 添加公共消息头
                             .build())
                     .build())

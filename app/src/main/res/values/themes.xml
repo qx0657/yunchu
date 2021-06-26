@@ -8,6 +8,7 @@
 
         <item name="colorPrimaryVariant">@color/colorAccent</item>
         <item name="colorOnPrimary">@color/colorAccent</item>
+
     </style>
 
     <!--HomeFragment标题样式-->
@@ -35,6 +36,9 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--Switch开关高亮颜色-->
+        <item name="colorControlActivated">?attr/colorAccent</item>
+
     </style>
 
     <style name="AppThemeNormal" parent="AppTheme.NoActionBar">
@@ -111,5 +115,11 @@
     <style name="CounterStyle" >
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <!--编辑页面文本长按选中颜色-->
+    <style name="SelectDisplayEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@null</item>
+        <item name="android:textColorHighlight">#20000000</item>
     </style>
 </resources>

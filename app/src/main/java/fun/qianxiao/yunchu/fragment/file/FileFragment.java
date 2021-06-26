@@ -11,16 +11,21 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import com.blankj.utilcode.constant.MemoryConstants;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ClipboardUtils;
+import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.blankj.utilcode.util.UriUtils;
 import com.blankj.utilcode.util.UtilsTransActivity;
 import com.bumptech.glide.Glide;
@@ -41,6 +46,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fun.qianxiao.yunchu.R;
 import fun.qianxiao.yunchu.base.BaseFragment;
 import fun.qianxiao.yunchu.databinding.FragmentFileBinding;
 import fun.qianxiao.yunchu.net.easyhttp.FileUploadApi;
@@ -113,6 +119,10 @@ public class FileFragment extends BaseFragment<FragmentFileBinding> {
             if(file==null){
                 binding.btnUploadCommit.showError(2000);
                 ToastTool.warning("请选择文件后上传");
+                binding.ivSelectFileF.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
+            }else if(FileUtils.getLength(file)>50* MemoryConstants.MB){
+                binding.btnUploadCommit.showError(2000);
+                ToastTool.warning("公共版最大支持上传50M");
             }else{
                 EasyHttp.post(this)
                         .server("http://shared.wd.cn.ecsxs.com")
@@ -126,6 +136,8 @@ public class FileFragment extends BaseFragment<FragmentFileBinding> {
                             @Override
                             public void onSucceed(String data) {
                                 binding.btnUploadCommit.showSucceed();
+                                ThreadUtils.runOnUiThreadDelayed(()->
+                                        binding.btnUploadCommit.reset(),1000);
                                 try{
                                     LogUtils.i(data);
                                     Pattern p = Pattern.compile("创建成功：http://(.*)</center>");
@@ -168,17 +180,17 @@ public class FileFragment extends BaseFragment<FragmentFileBinding> {
                                             ToastTool.success("合集链接已复制至剪贴板");
                                         });
                                     }
-                                    alertDialog.setOnDismissListener(dialog -> binding.btnUploadCommit.reset());
+                                    //alertDialog.setOnDismissListener(dialog -> binding.btnUploadCommit.reset());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     ToastTool.error("数据解析错误 "+e.getMessage());
-                                    binding.btnUploadCommit.reset();
+                                    //binding.btnUploadCommit.reset();
                                 }
                             }
 
                             @Override
                             public void onStart(Call call) {
-                                ((MainActivity) Objects.requireNonNull(getActivity())).openLoadingDialog("图片上传中");
+                                ((MainActivity) Objects.requireNonNull(getActivity())).openLoadingDialog("文件上传中");
                                 super.onStart(call);
                             }
 

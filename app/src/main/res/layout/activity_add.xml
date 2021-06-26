@@ -26,6 +26,7 @@
                 android:singleLine="true"
                 android:ellipsize="middle"
                 android:hint="请输入标题"
+                style="@style/SelectDisplayEditTextStyle"
                 android:textColorHint="@color/white70"
                 android:textColor="@color/white"
                 android:textSize="18sp"
@@ -74,7 +75,7 @@
                 app:counterMaxLength="20000000"
                 app:counterTextAppearance="@style/CounterStyle">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <fun.qianxiao.yunchu.ui.addoredit.view.ScaleTextInputEditText
                     android:id="@+id/tie_content_add_a"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

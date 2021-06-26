@@ -79,6 +79,9 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".ui.recyclebin.RecycleBinActivity"
             android:launchMode="singleTop" />
+        <activity android:name="com.king.zxing.CaptureActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/CaptureTheme"/>
     </application>
 
 </manifest>
